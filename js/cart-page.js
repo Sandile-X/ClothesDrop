@@ -45,6 +45,9 @@ document.addEventListener('DOMContentLoaded', () => {
       .join('');
 
     const subtotal = window.Cart.subtotal();
+    const freeDelivery = window.Cart.qualifiesForFreeDelivery();
+    const deposit = window.Cart.depositDue();
+    const balance = window.Cart.balanceDue();
 
     root.innerHTML = `
       <div class="cart-page-inner">
@@ -58,12 +61,21 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
           <div class="order-summary-row">
             <span>Delivery</span>
-            <span>Confirmed on WhatsApp</span>
+            <span>${freeDelivery ? 'Free (R500+ order)' : 'Confirmed on WhatsApp'}</span>
           </div>
           <div class="order-summary-row total">
             <span>Total</span>
             <span>${formatPrice(subtotal)}</span>
           </div>
+          <div class="order-summary-row">
+            <span>50% Deposit Due Now</span>
+            <span>${formatPrice(deposit)}</span>
+          </div>
+          <div class="order-summary-row">
+            <span>Balance on Delivery</span>
+            <span>${formatPrice(balance)}</span>
+          </div>
+          ${!freeDelivery ? `<p class="checkout-hint">Add ${formatPrice(500 - subtotal)} more to unlock free delivery.</p>` : ''}
 
           <form class="checkout-form" id="checkout-form" novalidate>
             <div>
@@ -84,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
             <p class="form-error" id="checkout-error">Please fill in your name, phone and delivery address.</p>
             <button type="submit" class="btn btn-gold checkout-submit">Checkout via WhatsApp</button>
-            <p class="checkout-hint">You'll be redirected to WhatsApp to confirm your order with Clothes Drop.</p>
+            <p class="checkout-hint">Pay 50% deposit to secure your order, balance on delivery — you'll be redirected to WhatsApp to confirm with Mihlali directly.</p>
           </form>
         </div>
       </div>

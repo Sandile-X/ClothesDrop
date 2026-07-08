@@ -3,6 +3,7 @@
 (function () {
   const STORAGE_KEY = 'cd_cart_v1';
   const WHATSAPP_NUMBER = '27782120124';
+  const FREE_DELIVERY_THRESHOLD = 500;
 
   function readItems() {
     try {
@@ -65,6 +66,18 @@
     }, 0);
   }
 
+  function qualifiesForFreeDelivery() {
+    return subtotal() >= FREE_DELIVERY_THRESHOLD;
+  }
+
+  function depositDue() {
+    return Math.round(subtotal() / 2);
+  }
+
+  function balanceDue() {
+    return subtotal() - depositDue();
+  }
+
   function updateBadge() {
     document.querySelectorAll('.cart-badge').forEach((el) => {
       const n = count();
@@ -108,6 +121,17 @@
     }
 
     subtotalEl.textContent = formatPrice(subtotal());
+
+    const hintEl = document.getElementById('cart-drawer-delivery-hint');
+    if (hintEl) {
+      if (items.length === 0) {
+        hintEl.textContent = '';
+      } else if (qualifiesForFreeDelivery()) {
+        hintEl.textContent = '✓ Free delivery unlocked!';
+      } else {
+        hintEl.textContent = `Add ${formatPrice(FREE_DELIVERY_THRESHOLD - subtotal())} more for free delivery`;
+      }
+    }
   }
 
   function buildWhatsAppMessage(customer) {
@@ -122,6 +146,9 @@
 
     lines.push('');
     lines.push(`Subtotal: ${formatPrice(subtotal())}`);
+    lines.push(`Delivery: ${qualifiesForFreeDelivery() ? 'Free (R500+ order)' : 'To be confirmed'}`);
+    lines.push(`50% Deposit Due Now: ${formatPrice(depositDue())}`);
+    lines.push(`Balance on Delivery: ${formatPrice(balanceDue())}`);
     lines.push('');
     lines.push(`Name: ${customer.name}`);
     lines.push(`Phone: ${customer.phone}`);
@@ -144,6 +171,9 @@
     clear,
     count,
     subtotal,
+    qualifiesForFreeDelivery,
+    depositDue,
+    balanceDue,
     updateBadge,
     renderDrawer,
     checkoutUrl,

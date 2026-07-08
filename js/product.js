@@ -64,9 +64,9 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
 
         <div class="product-detail-meta">
-          Direct service, honest answers &mdash; message any time.<br />
-          No high fees or surprise charges at delivery.<br />
-          Open 24 hours in Mthatha.
+          Direct service, honest service &mdash; message any time.<br />
+          50% deposit secures your order, balance on delivery.<br />
+          Free delivery on orders R500+. Based in Mthatha.
         </div>
       </div>
     </div>
