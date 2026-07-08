@@ -47,6 +47,32 @@ if (revealEls.length) {
 const yearEl = document.getElementById('year');
 if (yearEl) yearEl.textContent = new Date().getFullYear();
 
+// Hero parallax
+const parallaxImg = document.querySelector('[data-parallax]');
+if (parallaxImg && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+  let ticking = false;
+
+  function updateParallax() {
+    const offset = clamp(window.scrollY * 0.25, -50, 50);
+    parallaxImg.style.transform = `translateY(${offset}px) scale(1.15)`;
+    ticking = false;
+  }
+
+  window.addEventListener(
+    'scroll',
+    () => {
+      if (!ticking) {
+        requestAnimationFrame(updateParallax);
+        ticking = true;
+      }
+    },
+    { passive: true }
+  );
+
+  updateParallax();
+}
+
 // Cart drawer open/close
 const cartIconBtn = document.getElementById('cart-icon-btn');
 const cartDrawer = document.getElementById('cart-drawer');
